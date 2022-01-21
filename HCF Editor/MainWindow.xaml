@@ -1,0 +1,14 @@
+﻿<Window x:Class="HCF_Editor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HCF_Editor"
+        mc:Ignorable="d"
+        Title="HCF Editor" Height="450" Width="800">
+    <ScrollViewer>
+        <StackPanel x:Name="StackPanel" Background="White">
+            <Button x:Name="EditPsidDefButton" Content="Edit PSID Definitions"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
