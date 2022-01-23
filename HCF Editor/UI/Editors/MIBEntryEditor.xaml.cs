@@ -14,12 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HCF_Editor.UI
+namespace HCF_Editor.UI.Editors
 {
     public partial class MIBEntryEditor : UserControl
     {
-        public delegate void MIBEntryEvent(MIBEntry entry);
-        public MIBEntryEvent? OnEntryEdited { get; set; }
+        public Events.MIBEntryEvent? OnEntryEdited { get; set; }
 
         public MIBEntry? Entry 
         {
@@ -45,30 +44,32 @@ namespace HCF_Editor.UI
                 ValueTypeLabel.Content = "Value Type: ";
                 ValueTypeLabel.Content += entry.Type switch
                 {
+                    MIBValueType.Invalid => "Invalid",
                     MIBValueType.Bool => "Boolean",
                     MIBValueType.UInt => "UInt32",
                     MIBValueType.Int => "Int32",
                     MIBValueType.Octet => "Octet",
                     MIBValueType.None => "None",
-                    _ => "Invalid"
+                    _ => "Unknown"
                 };
 
-                if (valueEditor != null)
-                    StackPanel.Children.Remove((UserControl)valueEditor);
+                if (ValueEditor != null)
+                    StackPanel.Children.Remove((UserControl)ValueEditor);
 
                 if (entry.Type == MIBValueType.Octet)
-                    valueEditor = new ListValueEditor();
+                    ValueEditor = new ListValueEditor();
                 else
-                    valueEditor = new ValueEditor();
+                    ValueEditor = new ValueEditor();
 
-                valueEditor.Text = "Entry Value";
-                valueEditor.Value = entry.Value;
-                StackPanel.Children.Add((UserControl)valueEditor);
+                ValueEditor.Text = "Entry Value";
+                ValueEditor.Value = entry.Value;
+                StackPanel.Children.Add((UserControl)ValueEditor);
             }
         }
 
+        public IValueEditor? ValueEditor { get; private set; }
+
         private MIBEntry? entry;
-        private IValueEditor? valueEditor;
 
         public MIBEntryEditor() => 
             InitializeComponent();

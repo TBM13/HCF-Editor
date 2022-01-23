@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace HCF_Editor.UI
+namespace HCF_Editor.UI.Editors
 {
     public partial class ValueEditor : UserControl, IValueEditor
     {

@@ -1,4 +1,4 @@
-﻿namespace HCF_Editor.UI
+﻿namespace HCF_Editor.UI.Editors
 {
     public interface IValueEditor
     {

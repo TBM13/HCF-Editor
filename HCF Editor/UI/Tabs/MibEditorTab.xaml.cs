@@ -1,4 +1,6 @@
 ﻿using HCF_Editor.Samsung;
+using HCF_Editor.UI.Editors;
+using HCF_Editor.UI.Output;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +25,22 @@ namespace HCF_Editor.UI.Tabs
 
         public void LoadEncodedMIB(EncodedMIB mib)
         {
-            foreach(MIBEntry entry in mib.DecodeMibEntries())
-            {
-                MIBEntryEditor editor = new()
-                {
-                    Entry = entry
-                };
+            OutputViewer.Instance = OutputView;
 
-                MainStackPanel.Children.Add(editor);
+            foreach(MIBEntry entry in mib.DecodeMibEntries())
+                EntriesDataGrid.Items.Add(entry);
+
+            OutputViewer.Instance = null;
+        }
+
+        private void EntriesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EntryEditor.IsEnabled = false;
+
+            if (EntriesDataGrid.SelectedItems.Count == 1)
+            {
+                EntryEditor.IsEnabled = true;
+                EntryEditor.Entry = (MIBEntry)EntriesDataGrid.SelectedItem;
             }
         }
     }

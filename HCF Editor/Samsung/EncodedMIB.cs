@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HCF_Editor.UI.Output;
+using System;
 using System.Collections.Generic;
 
 namespace HCF_Editor.Samsung
@@ -16,9 +17,6 @@ namespace HCF_Editor.Samsung
             public Data(byte[] data) => 
                 bytes = data;
 
-            public byte Read(int index = 0) =>
-                bytes[index + ReadPosition];
-
             public void Advance(int amount) =>
                 ReadPosition += amount;
         }
@@ -35,16 +33,27 @@ namespace HCF_Editor.Samsung
 
         private void ValidateHeader()
         {
+            if (data.Bytes.Length < 8)
+            {
+                OutputViewer.Log("Encoded MIB file is too small. Aborting", OutputEntryType.Error);
+                data.Advance(data.Length);
+                return;
+            }
+
             // Validate header
-            if (!(data.Length >= 8 && data.Read(7) == 1))
-                throw new("Invalid Header");
+            if (data.Bytes[7] != 1)
+            {
+                OutputViewer.Log("Encoded MIB file has an invalid Header. Aborting", OutputEntryType.Error);
+                data.Advance(data.Length);
+                return;
+            }
 
             // Read Hash
             int MGT_HASH_SIZE_BYTES = 2;
             int MGT_HASH_OFFSET = 4;
 
             for (int i = 0; i < MGT_HASH_SIZE_BYTES; i++)
-                Hash = (Hash << 8) | data.Read(i + MGT_HASH_OFFSET);
+                Hash = (Hash << 8) | data.Bytes[i + MGT_HASH_OFFSET];
 
             // Discard header
             data.Advance(8);
@@ -54,11 +63,21 @@ namespace HCF_Editor.Samsung
         {
             List<MIBEntry> list = new();
 
-            while (data.Length > 0)
+            try
             {
-                data.Advance(MIB.Decode(data.Bytes, out MIBEntry entry));
-                list.Add(entry);
+                while (data.Length > 0)
+                {
+                    data.Advance(MIB.Decode(data.Bytes, out MIBEntry entry));
+                    list.Add(entry);
+                }
             }
+            catch (Exception ex)
+            {
+                OutputViewer.Log($"MIB Decode: {ex.Message}", OutputEntryType.Error);
+            }
+
+            if (data.Length > 0)
+                OutputViewer.Log($"{data.Length} bytes weren't read", OutputEntryType.Warn);
 
             return list;
         }

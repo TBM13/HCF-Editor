@@ -4,11 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HCF_Editor.UI.Tabs"
+             xmlns:editors="clr-namespace:HCF_Editor.UI.Editors"
+             xmlns:output="clr-namespace:HCF_Editor.UI.Output"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Header="MIB Editor">
-    <ScrollViewer>
-        <StackPanel x:Name="MainStackPanel" Background="White">
-            <!--<Button x:Name="EditPsidDefButton" Content="Edit PSID Definitions"/>-->
-        </StackPanel>
-    </ScrollViewer>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" MaxWidth="350"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="EntriesDataGrid" 
+                  AutoGenerateColumns="False"
+                  VerticalScrollBarVisibility="Visible"
+                  Background="#FFF7F7F7"  RowHeight="22" 
+                  SelectionChanged="EntriesDataGrid_SelectionChanged">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="PSID" Binding="{Binding Psid}" FontSize="12" MinWidth="30"/>
+                <DataGridTextColumn Header="Index 0" Binding="{Binding Index[0]}" FontSize="12" MinWidth="50"/>
+                <DataGridTextColumn Header="Index 1" Binding="{Binding Index[1]}" FontSize="12" MinWidth="50"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" FontSize="12" MinWidth="40"/>
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}" FontSize="12" MinWidth="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ScrollViewer Grid.Column="1">
+            <editors:MIBEntryEditor x:Name="EntryEditor" IsEnabled="False"/>
+        </ScrollViewer>
+
+        <output:OutputViewer x:Name="OutputView" 
+                             Grid.Column="1" VerticalAlignment="Bottom" 
+                             Visibility="Hidden"/>
+    </Grid>
 </TabItem>

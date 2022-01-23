@@ -45,7 +45,12 @@ namespace HCF_Editor
                 byte[] bytes = File.ReadAllBytes(dialog.FileName);
                 EncodedMIB file = new(bytes);
 
-                MibEditorTab tab = new();
+                MibEditorTab tab = new()
+                {
+                    Header = dialog.SafeFileName,
+                    ToolTip = dialog.FileName
+                };
+
                 AddTab(tab);
                 tab.LoadEncodedMIB(file);
             }

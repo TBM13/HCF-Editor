@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HCF_Editor.UI.Output;
+using System;
 using System.Buffers.Binary;
 
 namespace HCF_Editor.Samsung
@@ -52,7 +53,7 @@ namespace HCF_Editor.Samsung
                 case MIBValueType.None:
                     break;
                 default:
-                    throw new("Invalid Type");
+                    throw new("Invalid Entry Type");
             }
 
             BinaryPrimitives.WriteUInt16LittleEndian(encodedOutputSpan[2..], (ushort)(encodedLength - 4));
@@ -112,7 +113,7 @@ namespace HCF_Editor.Samsung
                         {
                             entry.Value = u;
                             if (decodedLength != 4 + length)
-                                throw new("WARN: Decoded length didn't match expected length (4 + length)");
+                                OutputViewer.Log("WARN: Decoded length didn't match expected length (4 + length)", OutputEntryType.Warn);
                         }
 
                         break;
@@ -120,7 +121,7 @@ namespace HCF_Editor.Samsung
                     case MIBValueType.Int:
                         decodedLength += DecodeInt32(encodedData[decodedLength..], out int i);
                         if (decodedLength != 4 + length)
-                            throw new("WARN: Decoded length didn't match expected length (4 + length)");
+                            OutputViewer.Log("WARN: Decoded length didn't match expected length (4 + length)", OutputEntryType.Warn);
 
                         entry.Value = i;
                         break;
@@ -128,7 +129,7 @@ namespace HCF_Editor.Samsung
                     case MIBValueType.Octet:
                         decodedLength += DecodeOctetStr(encodedData[decodedLength..], out byte[] o);
                         if (decodedLength != 4 + length)
-                            throw new("WARN: Decoded length didn't match expected length (4 + length)");
+                            OutputViewer.Log("WARN: Decoded length didn't match expected length (4 + length)", OutputEntryType.Warn);
 
                         entry.Value = o;
                         break;
@@ -147,7 +148,7 @@ namespace HCF_Editor.Samsung
                  */
 
                 if (encodedData[decodedLength] != 0x00)
-                    throw new("WARN: Padding not detected");
+                    OutputViewer.Log("WARN: Padding not detected", OutputEntryType.Warn);
 
                 length++;
             }
