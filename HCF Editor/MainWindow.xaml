@@ -3,12 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HCF_Editor"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:tabs="clr-namespace:HCF_Editor.UI.Tabs"
         mc:Ignorable="d"
         Title="HCF Editor" Height="450" Width="800">
-    <ScrollViewer>
-        <StackPanel x:Name="StackPanel" Background="White">
-            <Button x:Name="EditPsidDefButton" Content="Edit PSID Definitions"/>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid Background="#f6f5f4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <dragablz:TabablzControl x:Name="MainTabControl" Grid.Row="1">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController />
+            </dragablz:TabablzControl.InterTabController>
+
+            <tabs:WelcomeTab/>
+        </dragablz:TabablzControl>
+        
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="OpenFileMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
 </Window>

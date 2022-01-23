@@ -1,4 +1,7 @@
-﻿using HCF_Editor.UI;
+﻿using HCF_Editor.Samsung;
+using HCF_Editor.UI;
+using HCF_Editor.UI.Tabs;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,22 +25,29 @@ namespace HCF_Editor
         public MainWindow()
         {
             InitializeComponent();
-            ReadFile();
         }
 
-        private void ReadFile()
+        private void AddTab(TabItem tab)
         {
-            byte[] bytes = File.ReadAllBytes(@"D:\Android\Devices\A20\vendor-R\etc\wifi\mx140_wlan.hcf");
-            HcfFile hcf = new(bytes);
+            MainTabControl.Items.Add(tab);
+            MainTabControl.SelectedItem = tab;
+        }
 
-            foreach(MIBEntry entry in hcf.DecodeMibEntries())
+        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new()
             {
-                MIBEntryEditor editor = new()
-                {
-                    Entry = entry
-                };
+                Filter = "Encoded MIB Files (*.hcf)|*.hcf|All files (*.*)|*.*"
+            };
 
-                StackPanel.Children.Add(editor);
+            if (dialog.ShowDialog() == true)
+            {
+                byte[] bytes = File.ReadAllBytes(dialog.FileName);
+                EncodedMIB file = new(bytes);
+
+                MibEditorTab tab = new();
+                AddTab(tab);
+                tab.LoadEncodedMIB(file);
             }
         }
     }

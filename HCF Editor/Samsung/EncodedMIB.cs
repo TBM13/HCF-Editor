@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HCF_Editor
+namespace HCF_Editor.Samsung
 {
-    internal class HcfFile
+    public class EncodedMIB
     {
         private class Data
         {
@@ -27,7 +27,7 @@ namespace HCF_Editor
 
         private readonly Data data;
 
-        public HcfFile(byte[] bytes)
+        public EncodedMIB(byte[] bytes)
         {
             data = new(bytes);
             ValidateHeader();

@@ -2,12 +2,10 @@
 {
     public interface IValueEditor
     {
-        public delegate void ObjectEvent(object obj);
-
         /// <summary>
         /// Invoked when the value is edited and saved.
         /// </summary>
-        public ObjectEvent? OnValueEdited { get; set; }
+        public Events.ObjectEvent? OnValueEdited { get; set; }
 
 
         /// <summary>

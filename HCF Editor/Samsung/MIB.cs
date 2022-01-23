@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Buffers.Binary;
 
-namespace HCF_Editor
+namespace HCF_Editor.Samsung
 {
     /// <summary>
     /// Implementation of drivers/net/wireless/scsc/mib.c
@@ -18,36 +18,36 @@ namespace HCF_Editor
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8605 // Unboxing a possibly null value.
-        public static void Encode(MIBEntry entry, out byte[] encodedEntry)
+        public static void Encode(MIBEntry entry, out byte[] encodedOutput)
         {
             int requiredSize = 5 + (5 * SLSI_MIB_MAX_INDEXES) +
                                (entry.Type == MIBValueType.Octet ? ((byte[])entry.Value).Length : 5);
 
             ushort encodedLength = 4;
 
-            byte[] tmpBuffer = new byte[requiredSize];
-            Span<byte> tmpBufferSpan = new(tmpBuffer);
+            encodedOutput = new byte[requiredSize];
+            Span<byte> encodedOutputSpan = new(encodedOutput);
 
-            BinaryPrimitives.WriteUInt16LittleEndian(tmpBufferSpan, entry.Psid);
+            BinaryPrimitives.WriteUInt16LittleEndian(encodedOutputSpan, entry.Psid);
 
             for (int i = 0; i < SLSI_MIB_MAX_INDEXES && entry.Index[i] != 0; i++)
-                tmpBuffer[2] += (byte)EncodeUInt32(tmpBufferSpan[(4 + tmpBuffer[2])..], entry.Index[i]);
+                encodedOutput[2] += (byte)EncodeUInt32(encodedOutputSpan[(4 + encodedOutput[2])..], entry.Index[i]);
 
-            encodedLength += tmpBuffer[2];
+            encodedLength += encodedOutput[2];
 
             switch (entry.Type)
             {
                 case MIBValueType.UInt:
-                    encodedLength += (ushort)EncodeUInt32(tmpBufferSpan[encodedLength..], (uint)entry.Value);
+                    encodedLength += (ushort)EncodeUInt32(encodedOutputSpan[encodedLength..], (uint)entry.Value);
                     break;
                 case MIBValueType.Int:
-                    encodedLength += (ushort)EncodeInt32(tmpBufferSpan[encodedLength..], (int)entry.Value);
+                    encodedLength += (ushort)EncodeInt32(encodedOutputSpan[encodedLength..], (int)entry.Value);
                     break;
                 case MIBValueType.Octet:
-                    encodedLength += (ushort)EncodeOctetStr(tmpBufferSpan[encodedLength..], (byte[])entry.Value);
+                    encodedLength += (ushort)EncodeOctetStr(encodedOutputSpan[encodedLength..], (byte[])entry.Value);
                     break;
                 case MIBValueType.Bool:
-                    encodedLength += (ushort)EncodeUInt32(tmpBufferSpan[encodedLength..], (bool)entry.Value ? 1u : 0u);
+                    encodedLength += (ushort)EncodeUInt32(encodedOutputSpan[encodedLength..], (bool)entry.Value ? 1u : 0u);
                     break;
                 case MIBValueType.None:
                     break;
@@ -55,7 +55,7 @@ namespace HCF_Editor
                     throw new("Invalid Type");
             }
 
-            BinaryPrimitives.WriteUInt16LittleEndian(tmpBufferSpan[2..], (ushort)(encodedLength - 4));
+            BinaryPrimitives.WriteUInt16LittleEndian(encodedOutputSpan[2..], (ushort)(encodedLength - 4));
 
             if (encodedLength % 2 == 1)
             {
@@ -65,11 +65,9 @@ namespace HCF_Editor
 		         * is Even it will not be.
 		         */
 
-                tmpBuffer[encodedLength] = 0x00;
+                encodedOutput[encodedLength] = 0x00;
                 encodedLength++;
             }
-
-            encodedEntry = tmpBuffer;
         }
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -447,7 +445,7 @@ namespace HCF_Editor
     public class MIBEntry
     {
         public ushort Psid { get; set; }
-        public ushort[] Index { get; init; } = new ushort[MIB.SLSI_MIB_MAX_INDEXES];
+        public ushort[] Index { get; } = new ushort[MIB.SLSI_MIB_MAX_INDEXES];
         public object? Value { get; set; }
         public MIBValueType Type 
         { 

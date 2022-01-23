@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HCF_Editor.Samsung;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

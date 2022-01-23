@@ -7,7 +7,7 @@ namespace HCF_Editor.UI
 {
     public partial class ValueEditor : UserControl, IValueEditor
     {
-        public IValueEditor.ObjectEvent? OnValueEdited { get; set; }
+        public Events.ObjectEvent? OnValueEdited { get; set; }
 
         public string Text
         {
