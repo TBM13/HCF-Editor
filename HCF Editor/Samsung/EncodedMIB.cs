@@ -21,13 +21,18 @@ namespace HCF_Editor.Samsung
                 ReadPosition += amount;
         }
 
+        public string FilePath { get; init; }
+        public string FileName { get; init; }
         public int Hash { get; private set; }
 
         private readonly Data data;
 
-        public EncodedMIB(byte[] bytes)
+        public EncodedMIB(byte[] bytes, string filePath, string fileName)
         {
             data = new(bytes);
+            FilePath = filePath;
+            FileName = fileName;
+
             ValidateHeader();
         }
 

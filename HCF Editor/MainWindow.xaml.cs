@@ -1,5 +1,4 @@
 ﻿using HCF_Editor.Samsung;
-using HCF_Editor.UI;
 using HCF_Editor.UI.Tabs;
 using Microsoft.Win32;
 using System;
@@ -33,7 +32,12 @@ namespace HCF_Editor
             MainTabControl.SelectedItem = tab;
         }
 
-        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e)
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MIBMenuItem.IsEnabled = MainTabControl.SelectedItem is MibEditorTab;
+        }
+
+        private void File_OpenMenuItem_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new()
             {
@@ -43,7 +47,7 @@ namespace HCF_Editor
             if (dialog.ShowDialog() == true)
             {
                 byte[] bytes = File.ReadAllBytes(dialog.FileName);
-                EncodedMIB file = new(bytes);
+                EncodedMIB file = new(bytes, dialog.FileName, dialog.SafeFileName);
 
                 MibEditorTab tab = new()
                 {
@@ -54,6 +58,12 @@ namespace HCF_Editor
                 AddTab(tab);
                 tab.LoadEncodedMIB(file);
             }
+        }
+
+        private void MIB_EditPsidDefinitions_Click(object sender, RoutedEventArgs e)
+        {
+            MibEditorTab editor = (MibEditorTab)MainTabControl.SelectedItem;
+            editor.EditPsidDefinitions();
         }
     }
 }

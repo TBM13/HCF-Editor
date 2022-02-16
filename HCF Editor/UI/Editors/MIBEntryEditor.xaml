@@ -10,5 +10,33 @@
         <Label x:Name="PsidLabel" Content="PSID: {PSID}"/>
         <Label x:Name="IndexLabel" Content="Indexes: {INDEXES}"/>
         <Label x:Name="ValueTypeLabel" Content="Value Type: {TYPE}"/>
+        <Expander x:Name="PsidDefExpander" IsExpanded="True" Header="PSID Definition">
+            <Border BorderThickness="1 0 0 0" Margin="10,0,0,10">
+                <Border.BorderBrush>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <Rectangle StrokeDashArray="1.0 1.0"
+                                       StrokeThickness="3"
+                                       Stroke="Gray"
+                                       RadiusX="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.TopRight}"
+                                       RadiusY="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=CornerRadius.BottomLeft}"
+                                       Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                       Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Border.BorderBrush>
+
+                <StackPanel x:Name="PsidDef_StackPanel" Margin="5,0,0,0" Background="WhiteSmoke">
+                    <Label x:Name="PsidDef_Name" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_PerInterface" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Type" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Units" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Min" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Max" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Default" Visibility="Collapsed"/>
+                    <Label x:Name="PsidDef_Description" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+        </Expander>
     </StackPanel>
 </UserControl>

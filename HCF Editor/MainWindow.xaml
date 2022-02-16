@@ -13,7 +13,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <dragablz:TabablzControl x:Name="MainTabControl" Grid.Row="1">
+        <dragablz:TabablzControl x:Name="MainTabControl" 
+                                 Grid.Row="1"
+                                 SelectionChanged="MainTabControl_SelectionChanged">
+            
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
             </dragablz:TabablzControl.InterTabController>
@@ -23,7 +26,16 @@
         
         <Menu>
             <MenuItem Header="_File">
-                <MenuItem Header="_Open" Click="OpenFileMenuItem_Click"/>
+                <MenuItem Header="_Open" 
+                          Click="File_OpenMenuItem_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="_MIB"
+                      x:Name="MIBMenuItem"
+                      IsEnabled="False">
+                
+                <MenuItem Header="_Edit PSID Definitions" 
+                          Click="MIB_EditPsidDefinitions_Click"/>
             </MenuItem>
         </Menu>
     </Grid>

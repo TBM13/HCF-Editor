@@ -28,9 +28,14 @@
                             <StackPanel Orientation="Horizontal">
                                 <Grid>
                                     <ContentPresenter Margin="2" Content="{Binding}"/>
-                                    <Thumb Style="{DynamicResource InvisibleThumbStyle}" dragablz:DragablzItem.IsCustomThumb="True" />
+                                    <Thumb Style="{DynamicResource InvisibleThumbStyle}" 
+                                           dragablz:DragablzItem.IsCustomThumb="True" 
+                                           Margin="-5,-1,-23,-1"/>
                                 </Grid>
-                                <Button ToolTip="Close" Command="dragablz:TabablzControl.CloseItemCommand" Style="{StaticResource CloseItemCommandButtonStyle}" />
+                                
+                                <Button ToolTip="Close" 
+                                        Command="dragablz:TabablzControl.CloseItemCommand" 
+                                        Style="{StaticResource CloseItemCommandButtonStyle}"/>
                             </StackPanel>
                         </DataTemplate>
                     </Setter.Value>
