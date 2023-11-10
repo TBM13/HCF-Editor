@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dragablz" Version="0.0.3.223" />
+    <PackageReference Include="Dragablz" Version="0.0.3.234" />
   </ItemGroup>
 
 </Project>
